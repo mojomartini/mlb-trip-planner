@@ -1,16 +1,28 @@
+"""
+Database engine and session helper
+"""
+
 from sqlmodel import SQLModel, create_engine, Session
-from contextlib import contextmanager
-from .config import settings
+from backend.app.core.config import settings
 
-engine = create_engine(settings.sqlalchemy_uri, echo=False, pool_pre_ping=True)
+# ── 1. Engine ---------------------------------------------------
+engine = create_engine(
+    settings.sqlalchemy_uri,
+    echo=False,
+    pool_pre_ping=True,
+)
 
-def init_db() -> None:
-    """Run once to create tables."""
-    import backend.app.models  # noqa: F401 (imports models for SQLModel metadata)
-    SQLModel.metadata.create_all(engine)
+# ── 2. Session dependency for FastAPI ---------------------------
+def get_session():
+    """
+    FastAPI dependency.
+    Yields an active Session object and closes it after the request.
+    Usage:
 
-@contextmanager
-def get_session() -> Session:
+        from fastapi import Depends
+        @router.get("/")
+        def endpoint(session: Session = Depends(get_session)):
+            ...
+    """
     with Session(engine) as session:
         yield session
-
