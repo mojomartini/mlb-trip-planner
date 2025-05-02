@@ -15,9 +15,8 @@ def list_games(
 ):
     stmt = (
         select(Game)
-        .where(Game.date_utc >= date_from)
-        .where(Game.date_utc <= date_to)
-        .order_by(Game.date_utc)
+        .where(Game.game_date >= date_from)
+        .where(Game.game_date <= date_to)
+        .order_by(Game.game_date)
     )
     return session.exec(stmt).all()
-
