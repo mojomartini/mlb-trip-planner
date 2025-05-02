@@ -1,13 +1,13 @@
 from typing import Optional
-from datetime import datetime
+from datetime import date, time
 from sqlmodel import SQLModel, Field
 
 class Game(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    date_utc: datetime
-    home_team: str
-    away_team: str
-    stadium: str
-    tz: str
-    first_pitch_local: datetime
+    __tablename__ = "games"          # ← existing MySQL table
 
+    game_id: Optional[int] = Field(primary_key=True)
+    game_date: date
+    start_time_local: Optional[time] = None
+    start_time_et: Optional[time] = None
+    home_team_id: int
+    away_team_id: int
