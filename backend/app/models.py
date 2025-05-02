@@ -1,9 +1,9 @@
 from typing import Optional
-from datetime import date, time, datetime
-from sqlmodel import SQLModel, Field, Column, DateTime
+from datetime import date, time
+from sqlmodel import SQLModel, Field
 
 class Game(SQLModel, table=True):
-    __tablename__ = "games"
+    __tablename__ = "games"          # existing MySQL table
 
     game_id: Optional[int] = Field(primary_key=True)
     game_date: date
@@ -11,8 +11,3 @@ class Game(SQLModel, table=True):
     start_time_et: Optional[time] = None
     home_team_id: int
     away_team_id: int
-
-    # existing nullable column in your table
-    date_utc: Optional[datetime] = Field(
-        sa_column=Column(DateTime(timezone=True), nullable=True)
-    )
